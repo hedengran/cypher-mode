@@ -1,0 +1,41 @@
+* A Cypher and Neo4j Emacs package
+
+Cypher-mode is an Emacs major mode for editing and running Cypher queries in Neo4j.
+
+** Overview
+
+*** Running Neo4j
+
+To run queries, cypher-mode requires an actively running Neo4j instance.
+If you don't already have a Neo4j instance running in the background, you can launch a background process with `cypher-run-neo4j`.
+
+
+*** Running queries
+
+Queries can be sent from the buffer to `cypher-shell`.
+The simplest way of running a query in the buffer is to run `C-c C-c`, or `cypher-send-buffer-or-region`.
+If a region is currently highlighted, the function will send that region.
+Otherwise, it will send the entire **.
+
+[[file:screenshots/cypher-mode.png]]
+
+
+| variable                    | default value           | description                                                                                                                     |
+|-----------------------------+-------------------------+---------------------------------------------------------------------------------------------------------------------------------|
+| cypher-default-database     | "neo4j"                 | The default database.                                                                                                           |
+| cypher-current-database     | cypher-default-database | The database that queries will be issued to. To current database, run function cypher-use-database.                             |
+| cypher-username             | nil                     | The username used for connecting to the current database.                                                                       |
+| cypher-password             | nil                     | The password used for connecting to the current database.                                                                       |
+| cypher-neo4j-binary         | "neo4j"                 | The name of the Neo4j binary. If the binary is not in the Emacs path, you should set this variable with a absolute path.        |
+| cypher-shell-binary         | "cypher-shell"          | The name of the cypher-shell binary. If the binary is not in the Emacs path, you should set this variable with a absolute path. |
+| cypher-shell-verbose-output | t                       | Set to nil for plain output.                                                                                                    |
+
+
+** Functions
+
+| function                                         | key binding | description                                                            |
+|--------------------------------------------------+-------------+------------------------------------------------------------------------|
+| cypher-use-database (database-name)              |             | Update the targeted database to DATABASE-NAME for the current session. |
+| cypher-set-username-password (username password) |             | Configure the USERNAME and PASSWORD.                                   |
+| cypher-send-buffer-or-region (&optional b e)     | C-c C-c     | Send selected region, or entire buffer, to cypher-shell.               |
+| cypher-run-neo4j ()                              |             | Launch Neo4j console in a background process.                          |
