@@ -48,6 +48,8 @@
 
 (defvar cypher-password nil "Database password.")
 
+(defvar cypher-neo4j-binary "neo4j" "The Neo4j binary.")
+
 (defvar cypher-shell-binary "cypher-shell" "The cypher-shell binary.")
 
 (defvar cypher-shell-verbose-output t "Configure if cyper-shell output should be verbose or plain.")
@@ -76,10 +78,10 @@
           (if (not cypher-password) (error (format"Please set %s" 'cypher-password)) cypher-password)
           (if cypher-shell-verbose-output "verbose" "plain")))
 
-(defun cypher-send-buffer-or-region ()
-  (interactive)
+(defun cypher-send-buffer-or-region (&optional b e)
+  (interactive "r")
   (if (use-region-p)
-      (cypher-send-region)
+      (cypher-send-region b e)
     (cypher-send-buffer)))
 
 (defun cypher-send-buffer ()
@@ -87,11 +89,17 @@
   (interactive)
   (cypher-send (point-min) (point-max)))
 
+
 (defun cypher-send-region (&optional b e)
   "Send region B to E to cypher-shell and evaluate.
 Send buffer is no region is active."
   (interactive "r")
       (cypher-send b e))
+
+(defun cypher-run-neo4j ()
+  "Launch Neo4j console in a background process."
+  (interactive)
+  (start-process "neo4j" "*neo4j-console*" cypher-neo4j-binary "console"))
 
 
 (defun cypher-send (b e)
@@ -103,7 +111,7 @@ Send buffer is no region is active."
    ;; command and parameters
    (format "%s %s" cypher-shell-binary (cypher-get-cypher-shell-arguments))
    ;; output buffer
-   (get-buffer-create "cypher-shell-output")
+   (get-buffer-create "*cypher-shell-output*")
    nil))
 
 (provide 'cypher-mode)
